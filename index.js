@@ -1,5 +1,6 @@
 // Import the corresponding libraries and information required
 // to create the pomodiscord bot
+const Database = require("@replit/database");
 const Discord = require("discord.js");
 const { command_prefix, token } = require("./config.json");
 const fs = require("fs");
@@ -9,7 +10,6 @@ const client = new Discord.Client();
 
 // Creates an extension of the Map, holding commands
 client.commands = new Discord.Collection();
-const ONE_SECOND = 1000; // In miliseconds
 
 // Grab a list of the command files
 const commandFiles = fs.readdirSync('./bcompathon-discbot/commands').filter(file => file.endsWith('.js'));
