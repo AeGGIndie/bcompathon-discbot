@@ -4,7 +4,7 @@ const fs = require("fs");
 // Tries to get our command prefix
 var file;
 try {
-    var file = fs.readFileSync('./bcompathon-discbot/config.json', 'utf8');
+    var file = fs.readFileSync('./config.json', 'utf8');
 } catch(e) {
     console.log('Error:', e.stack);
 }
