@@ -5,11 +5,12 @@ const Discord = require("discord.js");
 const db = new Database()
 
 module.exports = class Timer {
-  constructor(time, user_id, message, embed){
+  constructor(time, user_id, message, embed, discord){
     this.time = time; // Miliseconds
     this.embed = embed;
     this.userid = user_id; // Unique user id, like jason_#1373
     this.message = message; // The most rececnt message sent by a user
+    this.DiscObj = discord;
   }
 
   start(){

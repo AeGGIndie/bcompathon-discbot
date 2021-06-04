@@ -2,10 +2,35 @@
 // to create the pomodiscord bot
 const Discord = require("discord.js");
 const { command_prefix, token } = require("./config.json");
+const { Sequelize } = require('sequelize');
 const fs = require("fs");
+// const { setUncaughtExceptionCaptureCallback } = require("process");
 
 // Create a link to the discord client to our code
 const client = new Discord.Client();
+
+// Create a link to the SQLite3 database
+const sequelize = new Sequelize({
+  host: 'localhost',
+  dialect: 'sqlite',
+  logging: false,
+  storage: 'models/database.sqlite',
+});
+
+// Define a model structure
+const Tags = sequelize.define('tags', {
+  userid: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    unique: true,
+  },
+  usertag: Sequelize.TEXT,
+  minutes: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+    allowNull: false,
+  },
+});
 
 // Creates an extension of the Map, holding commands
 client.commands = new Discord.Collection();
@@ -25,6 +50,13 @@ for (const file of commandFiles) {
 
 // Output to the console the bots user tag once it's ready to run
 client.on('ready', () => {
+  Tags.sync();
+  try {
+    sequelize.authenticate();
+    console.log('Connection has been established succeessfully.');
+  } catch (err) {
+    console.error('Unable to connect to the database: ', err);
+  }
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
@@ -46,7 +78,7 @@ client.on('message', message => {
 
   // Attempt to run the command (assuming it exists)
 	try {
-		command.execute(message, args);
+		command.execute(message, args, Discord);
 	} catch (error) {
 		console.error(error);
 		message.reply('There was an error trying to execute that command!');
