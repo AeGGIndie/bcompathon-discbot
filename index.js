@@ -2,42 +2,45 @@
 // to create the pomodiscord bot
 const Discord = require("discord.js");
 const { command_prefix, token } = require("./config.json");
-const { Sequelize } = require('sequelize');
+const SQLize = require("./sqldb.js");
 const fs = require("fs");
 // const { setUncaughtExceptionCaptureCallback } = require("process");
 
 // Create a link to the discord client to our code
 const client = new Discord.Client();
+// const dbConnect = new SQLize.Users();
 
-// Create a link to the SQLite3 database
-const sequelize = new Sequelize({
-  host: 'localhost',
-  dialect: 'sqlite',
-  logging: false,
-  storage: 'models/database.sqlite',
-});
+// Remove the Sequelize link here and implement it into the sqldb.js
 
-// Define a model structure
-const Tags = sequelize.define('tags', {
-  userid: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    unique: true,
-  },
-  usertag: Sequelize.TEXT,
-  minutes: {
-    type: Sequelize.INTEGER,
-    defaultValue: 0,
-    allowNull: false,
-  },
-});
+// // Create a link to the SQLite3 database
+// const sequelize = new Sequelize({
+//   host: 'localhost',
+//   dialect: 'sqlite',
+//   logging: false,
+//   storage: 'models/database.sqlite',
+// });
+
+// // Define a model structure
+// const Users = sequelize.define('Users', {
+//   userid: {
+//     type: Sequelize.INTEGER,
+//     allowNull: false,
+//     unique: true,
+//   },
+//   usertag: Sequelize.TEXT,
+//   minutes: {
+//     type: Sequelize.INTEGER,
+//     defaultValue: 0,
+//     allowNull: false,
+//   },
+// });
 
 // Creates an extension of the Map, holding commands
 client.commands = new Discord.Collection();
 
 // Grab a list of the command files
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const excludeFiles = ['timer.js'];
+const excludeFiles = ['sqldb.js','timer.js'];
 
 // Iterate through each file
 for (const file of commandFiles) {
@@ -50,19 +53,23 @@ for (const file of commandFiles) {
 
 // Output to the console the bots user tag once it's ready to run
 client.on('ready', () => {
-  Tags.sync();
-  try {
-    sequelize.authenticate();
-    console.log('Connection has been established succeessfully.');
-  } catch (err) {
-    console.error('Unable to connect to the database: ', err);
-  }
+  // Ensure the model exists in the database
+  // Users.sync();
+
+  // Check that the bot has successfully connected to the database
+  // try {
+  //   sequelize.authenticate();
+  //   console.log('Connection has been established succeessfully.');
+  // } catch (err) {
+  //   console.error('Unable to connect to the database: ', err);
+  // }
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
 // Listen to an event where a message is entered
 client.on('message', message => {
   // Create a command prefix that we can refer to for each message
+  console.log(message.author);
 	if (!message.content.startsWith(command_prefix) || message.author.bot) return;
   const args = message.content.slice(command_prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
