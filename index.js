@@ -12,17 +12,19 @@ const client = new Discord.Client();
 // Creates an extension of the Map, holding commands
 client.commands = new Discord.Collection();
 
-// Grab a list of the command files
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+// Grab a list of the command folders
+const commandFolders = fs.readdirSync('./commands');
 const excludeFiles = ['timer.js'];
 
-// Iterate through each file
-for (const file of commandFiles) {
-  if (excludeFiles.includes(file)){continue}
-	const command = require(`./commands/${file}`);
-	// set a new item in the Collection
-	// with the key as the command name and the value as the exported module
-	client.commands.set(command.name, command);
+// Iterate through each folder
+for (const folder of commandFolders){
+  // Grab each command file in the folder
+  const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+  for (const file of commandFiles){
+    const command = require(`./commands/${folder}/${file}`);
+    if (excludeFiles.includes(file)){continue}
+    client.commands.set(command.name, command);
+  }
 }
 
 
@@ -68,6 +70,7 @@ client.on('message', message => {
 
   // Attempt to run the command (assuming it exists)
 	try {
+    // Calls the execute function inside the corresponding command file 
 		command.execute(message, args, Discord);
 	} catch (error) {
 		console.error(error);
