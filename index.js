@@ -19,14 +19,15 @@ const excludeFiles = ['timer.js'];
 // Iterate through each folder
 for (const folder of commandFolders){
   // Grab each command file in the folder
-  const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+  const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+  
+  // Iterate through each file in the folder
   for (const file of commandFiles){
     const command = require(`./commands/${folder}/${file}`);
     if (excludeFiles.includes(file)){continue}
     client.commands.set(command.name, command);
   }
 }
-
 
 //
 // Events
