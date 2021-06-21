@@ -22,6 +22,48 @@ module.exports = class Timer {
    * 
    */
 
+  async findUser(){
+    /*
+     * Description: Finds a user in the DB.
+     * Parameter(s): userToFind (Model)
+     * 
+     * Return: First Instance of userToFind (Model) if exists,
+     *         null otherwise 
+     * 
+     */
+  }
+
+  async addUser(){
+    /*
+     * Description: Adds a user into the DB
+     * Parameter(s): userToAdd (Model)
+     * 
+     * Return: Model (refer to Sequelize API)
+     * 
+     */
+  }
+
+  async getUserMins(){
+    /*
+     * Description: Gets the number of minutes from a user
+     * Parameter(s): user
+     * 
+     * Return: Minutes (Miliseconds)
+     * 
+     */
+  }
+
+  async addMins(){
+    /*
+     * Description: Updates/Adds the minutes of users associated
+     *              with the timer
+     * Parameter(s): users
+     * 
+     * Return: TBD
+     * 
+     */
+  }
+
   // Starts a Timer to run for waitTime
   async start (){
 
