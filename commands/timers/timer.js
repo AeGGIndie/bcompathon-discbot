@@ -5,11 +5,12 @@
 // const db = new Database()
 
 module.exports = class Timer {
-  constructor(waitTime, userMessage, statsEmbed, Discord){
+  constructor(waitTime, userMessage, userInfoEmbed, Discord, Users){
     this.time = waitTime; // Miliseconds
-    this.statsEmbed = statsEmbed;
+    this.userInfoEmbed = userInfoEmbed;
     this.userMessage = userMessage; // The most rececnt message sent by a user
     this.Discord = Discord;
+    this.Users = Users; // DB Connection
   }
   /*
    * Create methods that replicate a timer
@@ -31,6 +32,12 @@ module.exports = class Timer {
      *         null otherwise 
      * 
      */
+    const user = await this.Users.findOne({
+      where: {
+        userid: this.userMessage.author.id
+      }
+    });
+    return (user != null ? true : false);
   }
 
   async addUser(){
@@ -41,6 +48,12 @@ module.exports = class Timer {
      * Return: Model (refer to Sequelize API)
      * 
      */
+    const newUser = await this.Users.create({
+      userid: this.userMessage.author.id,
+      username: this.userMessage.author.username,
+      usertag: this.userMessage.author.discriminator,
+    });
+    console.log(JSON.stringify(await this.Users.findAll(), null, 2));
   }
 
   async getUserMins(){
@@ -64,9 +77,17 @@ module.exports = class Timer {
      */
   }
 
-  // Starts a Timer to run for waitTime
   async start (){
+    /*
+     * Description: Starts a timer for the specified user and waitTime
+     * Parameter(s): user, waitTime
+     * 
+     * Return: TBD
+     * 
+     */
 
+    console.log(await this.findUser());
+    
   }
 
   

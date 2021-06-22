@@ -7,7 +7,7 @@ module.exports = {
   url: 'https://luxafor.com/the-ultimate-guide-how-to-use-pomodoro-technique-when-working-on-different-tasks/',
   aliases: ['short', 'small', '25'],
   usage: '+pomo <short/small/25>',
-	execute(message, args, Discord) {
+	execute(message, args, Discord, Users) {
 
 
     //
@@ -30,8 +30,8 @@ module.exports = {
     ) // here for the *** EMBED ***
 
     // Start the timer
-    console.log(message);
-    timer = new Timer(POM_TIME * ONE_SECOND, message, exampleEmbed, Discord);
+    // console.log(message);
+    timer = new Timer(POM_TIME * ONE_SECOND, message, exampleEmbed, Discord, Users);
     timer.start();
 
     // End of command

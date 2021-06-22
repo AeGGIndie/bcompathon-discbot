@@ -38,19 +38,18 @@ client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
   // Example of inserting creating and saving an entry into the table Users
-  /*try{
-    const test = await Users.create({
-      userid: 23,
-      username: 'test',
-      usertag: 3214,
-    });
-  }
-  catch (err) {
-    console.error(err);
-  }
+  // try{
+  //   const test = await Users.create({
+  //     userid: '848611967748014130',
+  //   });
+  //   console.log('ran here');
+  // }
+  // catch (err) {
+  //   console.error(err);
+  // }
   const users = await Users.findAll();
   console.log(JSON.stringify(users, null, 2));
-  */
+  
 });
 
 // Listen to an event where a message is entered
@@ -72,7 +71,7 @@ client.on('message', message => {
   // Attempt to run the command (assuming it exists)
 	try {
     // Calls the execute function inside the corresponding command file 
-		command.execute(message, args, Discord);
+		command.execute(message, args, Discord, Users);
 	} catch (error) {
 		console.error(error);
 		message.reply('There was an error trying to execute that command!');
