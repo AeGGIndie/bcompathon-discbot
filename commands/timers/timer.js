@@ -6,7 +6,7 @@
 
 module.exports = class Timer {
   constructor(waitTime, userMessage, userInfoEmbed, Discord, Users){
-    this.time = waitTime; // Miliseconds
+    this.waitTime = waitTime; // Miliseconds
     this.userInfoEmbed = userInfoEmbed;
     this.userMessage = userMessage; // The most rececnt message sent by a user
     this.Discord = Discord;
@@ -32,12 +32,11 @@ module.exports = class Timer {
      *         null otherwise 
      * 
      */
-    const user = await this.Users.findOne({
+    return (await this.Users.findOne({
       where: {
         userid: this.userMessage.author.id
       }
-    });
-    return (user != null ? true : false);
+    }));
   }
 
   async addUser(){
@@ -48,12 +47,13 @@ module.exports = class Timer {
      * Return: Model (refer to Sequelize API)
      * 
      */
-    const newUser = await this.Users.create({
-      userid: this.userMessage.author.id,
-      username: this.userMessage.author.username,
-      usertag: this.userMessage.author.discriminator,
-    });
-    console.log(JSON.stringify(await this.Users.findAll(), null, 2));
+    try {
+      return (await this.Users.create({
+        userid: this.userMessage.author.id,
+      }));
+    } catch (error){
+      console.error(error);
+    }
   }
 
   async getUserMins(){
@@ -64,6 +64,11 @@ module.exports = class Timer {
      * Return: Minutes (Miliseconds)
      * 
      */
+    return (await this.Users.findOne({
+      where: {
+        userid: this.userMessage.author.id
+      }
+    })).minutes;
   }
 
   async addMins(){
@@ -75,6 +80,16 @@ module.exports = class Timer {
      * Return: TBD
      * 
      */
+    const currentUser = (await this.findUser());
+    try {
+      const updated = await (this.Users.update({ minutes: currentUser.minutes + (this.waitTime / 1000) }, {
+        where: {
+          userid: currentUser.userid,
+        }
+      }))
+    } catch (err){
+      console.error(err);
+    }
   }
 
   async start (){
@@ -86,8 +101,11 @@ module.exports = class Timer {
      * 
      */
 
-    console.log(await this.findUser());
-    
+    // Adds the user to the database if they aren't already in it
+    await this.addUser();
+    console.log(await this.getUserMins());
+    await this.addMins();
+
   }
 
   
