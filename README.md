@@ -19,6 +19,8 @@ A Discord Bot made at University of Guelph's Bachelor of Computing "BCOMPATHON" 
 
 ### Afterwards
 - At the moment, the bot is currently being maintained by the current authors and is looking to be improved for future purposes regarding studying in discord sessions.
+- (05/10/2021) I'm actually currently planning on hosting the back-end using Google Firestore and host the actual bot using one of Google's services (also adding buttons!).
+
 
 Authors: 
 
